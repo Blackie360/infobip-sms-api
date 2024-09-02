@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Card, CardContent } from './ui/card';
 
 interface AddOnsProps {
   selectedAddOns: string[];
@@ -7,38 +8,43 @@ interface AddOnsProps {
   onGoBack: () => void;
 }
 
-const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNextStep, onGoBack }) => {
-  const [addOns, setAddOns] = useState([
-    { name: 'Online Services', price: '+$1/mo' },
-    { name: 'Larger Storage', price: '+$2/mo' },
-    { name: 'Customizable Profile', price: '+$2/mo' }
-  ]);
+const addOns = [
+  { name: 'Online Services', description: 'Access to multiplayer games', price: 1 },
+  { name: 'Larger Storage', description: 'Additional 1TB of cloud storage', price: 2 },
+  { name: 'Customizable Profile', description: 'Custom theme and avatar', price: 2 },
+];
 
-  const handleToggleAddOn = (addOn: string) => {
-    setSelectedAddOns(prev => 
+const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNextStep, onGoBack }) => {
+  // Handle the case where selectedAddOns might be undefined
+  if (!selectedAddOns) {
+    selectedAddOns = [];
+  }
+
+  const handleSelectAddOn = (addOn: string) => {
+    setSelectedAddOns(prev =>
       prev.includes(addOn) ? prev.filter(item => item !== addOn) : [...prev, addOn]
     );
   };
 
   return (
-    <div>
+    <>
       <h2 className="text-3xl font-bold text-blue-900 mb-4">Pick Add-Ons</h2>
-      <p className="text-gray-700 mb-6">
-        Add-ons help enhance your experience with extra features.
-      </p>
-      {addOns.map((addOn) => (
-        <div key={addOn.name} className="flex items-center mb-4">
-          <input
-            type="checkbox"
-            checked={selectedAddOns.includes(addOn.name)}
-            onChange={() => handleToggleAddOn(addOn.name)}
-            className="mr-2"
-          />
-          <label className="text-lg">
-            {addOn.name} <span className="text-gray-500">{addOn.price}</span>
-          </label>
-        </div>
-      ))}
+      <p className="text-gray-500 mb-8">Select any add-ons you'd like to include with your plan.</p>
+      <div className="flex flex-col space-y-4">
+        {addOns.map(addOn => (
+          <Card
+            key={addOn.name}
+            className={`p-4 flex items-center justify-between rounded-lg cursor-pointer ${selectedAddOns.includes(addOn.name) ? 'bg-purple-100' : 'bg-gray-100'}`}
+            onClick={() => handleSelectAddOn(addOn.name)}
+          >
+            <CardContent className="flex flex-col">
+              <h3 className="text-lg font-bold mb-1">{addOn.name}</h3>
+              <p className="text-gray-700">{addOn.description}</p>
+            </CardContent>
+            <div className="text-lg font-semibold">+${addOn.price}/mo</div>
+          </Card>
+        ))}
+      </div>
       <div className="mt-6 flex space-x-4">
         <button
           type="button"
@@ -55,7 +61,7 @@ const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNe
           Next Step
         </button>
       </div>
-    </div>
+    </>
   );
 };
 

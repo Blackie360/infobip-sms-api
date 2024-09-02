@@ -1,7 +1,5 @@
-
 import React from 'react';
 import { Card, CardContent } from './ui/card';
-
 
 interface Plan {
   name: string;
@@ -25,7 +23,14 @@ const plans: Plan[] = [
   { name: 'Pro', priceMonthly: 15, priceYearly: 150, icon: '🚀' },
 ];
 
-const PlanSelection: React.FC<PlanSelectionProps> = ({ billingPeriod, setBillingPeriod, selectedPlan, setSelectedPlan, onNextStep, onGoBack }) => (
+const PlanSelection: React.FC<PlanSelectionProps> = ({
+  billingPeriod,
+  setBillingPeriod,
+  selectedPlan,
+  setSelectedPlan,
+  onNextStep,
+  onGoBack,
+}) => (
   <>
     <h2 className="text-3xl font-bold text-blue-900 mb-4">Select Plan</h2>
     <div className="mb-6 flex items-center">
@@ -69,17 +74,13 @@ const PlanSelection: React.FC<PlanSelectionProps> = ({ billingPeriod, setBilling
         Go Back
       </button>
       <button
-  type="button"
-  className="bg-blue-900 text-white px-6 py-3 rounded-lg"
-  onClick={() => {
-    console.log('Next Step Clicked'); // Debug log
-    onNextStep();
-  }}
-  disabled={!selectedPlan}
->
-  Next Step
-</button>
-
+        type="button"
+        className="bg-blue-900 text-white px-6 py-3 rounded-lg"
+        onClick={onNextStep}
+        disabled={!selectedPlan}
+      >
+        Next Step
+      </button>
     </div>
   </>
 );

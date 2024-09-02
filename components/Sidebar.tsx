@@ -64,7 +64,13 @@ const Sidebar: React.FC = () => {
             onGoBack={handleGoBack}
           />
         ) : activeStep === 'step3' ? (
-          <AddOns onNextStep={handleNextStep} onGoBack={handleGoBack} />
+          <AddOns
+  selectedAddOns={selectedAddOns || []}
+  setSelectedAddOns={setSelectedAddOns}
+  onNextStep={handleNextStep}
+  onGoBack={handleGoBack}
+/>
+
         ) : (
           <Summary
           selectedPlan={selectedPlan}
