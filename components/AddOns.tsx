@@ -29,7 +29,7 @@ const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNe
   return (
     <>
       <h2 className="text-3xl font-bold text-blue-900 mb-4">Pick Add-Ons</h2>
-      <p className="text-gray-500 mb-8">Select any add-ons you'd like to include with your plan.</p>
+      <p className="text-gray-500 mb-8">Select any add-ons you would  like to include with your plan.</p>
       <div className="flex flex-col space-y-4">
         {addOns.map(addOn => (
           <Card
