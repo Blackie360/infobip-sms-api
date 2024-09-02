@@ -4,17 +4,23 @@ import Popup from './Popup';
 interface SummaryProps {
   selectedPlan: 'Arcade' | 'Advanced' | 'Pro' | null;
   billingPeriod: 'monthly' | 'yearly';
-  selectedAddOns: { name: string; price: number }[];
+  selectedAddOns: { name: string; prices: [number, number, number] }[]; // Array of prices for each plan
   onGoBack: () => void;
   onConfirm: () => void;
-  onEditPlan: () => void; // Function to handle editing the plan
-  onEditAddOns: () => void; // Function to handle editing add-ons
+  onEditPlan: () => void;
+  onEditAddOns: () => void;
 }
 
 const planPrices: Record<'Arcade' | 'Advanced' | 'Pro', { priceMonthly: number; priceYearly: number }> = {
   Arcade: { priceMonthly: 9, priceYearly: 90 },
   Advanced: { priceMonthly: 12, priceYearly: 120 },
   Pro: { priceMonthly: 15, priceYearly: 150 },
+};
+
+const planIndex: Record<'Arcade' | 'Advanced' | 'Pro', number> = {
+  Arcade: 0,
+  Advanced: 1,
+  Pro: 2,
 };
 
 const Summary: React.FC<SummaryProps> = ({
@@ -40,14 +46,14 @@ const Summary: React.FC<SummaryProps> = ({
   // Calculate the price of the selected plan
   const planPrice = selectedPlan
     ? billingPeriod === 'monthly'
-      ? planPrices[selectedPlan].priceMonthly
-      : planPrices[selectedPlan].priceYearly
+      ? planPrices[selectedPlan]?.priceMonthly ?? 0 // Fallback to 0 if undefined
+      : planPrices[selectedPlan]?.priceYearly ?? 0 // Fallback to 0 if undefined
     : 0;
 
- 
-  function formatPrice(planPrice: number): React.ReactNode {
-    throw new Error('Function not implemented.');
-  }
+  // Function to format the price (ensure it gets a valid number)
+  const formatPrice = (price: number): string => {
+    return price.toFixed(2); // Format the price to two decimal places
+  };
 
   return (
     <div className="p-8 bg-white rounded-xl shadow-md relative">
@@ -78,7 +84,11 @@ const Summary: React.FC<SummaryProps> = ({
           <ul className="list-disc list-inside">
             {selectedAddOns.map((addOn, index) => (
               <li key={index} className="text-lg">
-                {addOn.name} - ${formatPrice(addOn.price)}/mo
+                {addOn.name} - ${
+                  selectedPlan && planIndex[selectedPlan] !== undefined 
+                    ? formatPrice(addOn.prices[planIndex[selectedPlan]]) 
+                    : '0.00'
+                }/mo
               </li>
             ))}
           </ul>
