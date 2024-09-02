@@ -26,7 +26,7 @@ const planIndex: Record<'Arcade' | 'Advanced' | 'Pro', number> = {
 const Summary: React.FC<SummaryProps> = ({
   selectedPlan,
   billingPeriod,
-  selectedAddOns = [], // Default to an empty array if not provided
+  selectedAddOns = [], 
   onGoBack,
   onConfirm,
   onEditPlan,
@@ -46,8 +46,8 @@ const Summary: React.FC<SummaryProps> = ({
   // Calculate the price of the selected plan
   const planPrice = selectedPlan
     ? billingPeriod === 'monthly'
-      ? planPrices[selectedPlan]?.priceMonthly ?? 0 // Fallback to 0 if undefined
-      : planPrices[selectedPlan]?.priceYearly ?? 0 // Fallback to 0 if undefined
+      ? planPrices[selectedPlan]?.priceMonthly ?? 0 
+      : planPrices[selectedPlan]?.priceYearly ?? 0 
     : 0;
 
   // Calculate the total add-ons price

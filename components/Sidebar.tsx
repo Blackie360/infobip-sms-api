@@ -43,7 +43,7 @@ const Sidebar: React.FC = () => {
       billingPeriod,
       selectedAddOns,
     });
-    // You can also redirect or perform other actions here
+    
   };
 
   return (
@@ -74,7 +74,7 @@ const Sidebar: React.FC = () => {
           />
         ) : activeStep === 'step3' ? (
           <AddOns
-            selectedAddOns={selectedAddOns}  // Ensure this matches the expected type
+            selectedAddOns={selectedAddOns}  
             setSelectedAddOns={setSelectedAddOns}
             onNextStep={handleNextStep}
             onGoBack={handleGoBack}
