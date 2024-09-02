@@ -2,20 +2,30 @@ import React, { useState } from 'react';
 import Popup from './Popup';
 
 interface SummaryProps {
-  selectedPlan: string | null;
+  selectedPlan: 'Arcade' | 'Advanced' | 'Pro' | null;
   billingPeriod: 'monthly' | 'yearly';
   selectedAddOns: { name: string; price: number }[];
   onGoBack: () => void;
   onConfirm: () => void;
+  onEditPlan: () => void; // Function to handle editing the plan
+  onEditAddOns: () => void; // Function to handle editing add-ons
 }
 
-const planPrices = {
+const planPrices: Record<'Arcade' | 'Advanced' | 'Pro', { priceMonthly: number; priceYearly: number }> = {
   Arcade: { priceMonthly: 9, priceYearly: 90 },
   Advanced: { priceMonthly: 12, priceYearly: 120 },
   Pro: { priceMonthly: 15, priceYearly: 150 },
 };
 
-const Summary: React.FC<SummaryProps> = ({ selectedPlan, billingPeriod, selectedAddOns, onGoBack, onConfirm }) => {
+const Summary: React.FC<SummaryProps> = ({
+  selectedPlan,
+  billingPeriod,
+  selectedAddOns,
+  onGoBack,
+  onConfirm,
+  onEditPlan,
+  onEditAddOns,
+}) => {
   const [showPopup, setShowPopup] = useState(false);
 
   const handleConfirm = () => {
@@ -27,18 +37,17 @@ const Summary: React.FC<SummaryProps> = ({ selectedPlan, billingPeriod, selected
     setShowPopup(false);
   };
 
-  // Calculate the total price
-  const calculateTotalPrice = () => {
-    if (!selectedPlan) return 0;
-
-    const planPrice = billingPeriod === 'monthly'
+  // Calculate the price of the selected plan
+  const planPrice = selectedPlan
+    ? billingPeriod === 'monthly'
       ? planPrices[selectedPlan].priceMonthly
-      : planPrices[selectedPlan].priceYearly;
+      : planPrices[selectedPlan].priceYearly
+    : 0;
 
-    const addOnTotal = selectedAddOns.reduce((total, addOn) => total + addOn.price, 0);
-
-    return planPrice + addOnTotal;
-  };
+ 
+  function formatPrice(planPrice: number): React.ReactNode {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <div className="p-8 bg-white rounded-xl shadow-md relative">
@@ -51,8 +60,15 @@ const Summary: React.FC<SummaryProps> = ({ selectedPlan, billingPeriod, selected
       <div className="mb-6">
         <h3 className="text-xl font-bold text-blue-900 mb-2">Selected Plan</h3>
         <p className="text-lg">
-          {selectedPlan} - ${billingPeriod === 'monthly' ? planPrices[selectedPlan || ''].priceMonthly : planPrices[selectedPlan || ''].priceYearly}/{billingPeriod}
+          {selectedPlan} - ${formatPrice(planPrice)}/{billingPeriod}
         </p>
+        <button
+          type="button"
+          className="text-blue-500 underline mt-2"
+          onClick={onEditPlan}
+        >
+          Change Plan
+        </button>
       </div>
 
       {/* Display selected add-ons */}
@@ -62,21 +78,20 @@ const Summary: React.FC<SummaryProps> = ({ selectedPlan, billingPeriod, selected
           <ul className="list-disc list-inside">
             {selectedAddOns.map((addOn, index) => (
               <li key={index} className="text-lg">
-                {addOn.name} - ${addOn.price}/mo
+                {addOn.name} - ${formatPrice(addOn.price)}/mo
               </li>
             ))}
           </ul>
         ) : (
           <p className="text-lg">No add-ons selected</p>
         )}
-      </div>
-
-      {/* Display total price */}
-      <div className="mb-6">
-        <h3 className="text-xl font-bold text-blue-900 mb-2">Total Price</h3>
-        <p className="text-lg font-bold">
-          ${calculateTotalPrice()}/{billingPeriod}
-        </p>
+        <button
+          type="button"
+          className="text-blue-500 underline mt-2"
+          onClick={onEditAddOns}
+        >
+          Change Add-Ons
+        </button>
       </div>
 
       <div className="flex space-x-4">
