@@ -1,9 +1,10 @@
+"use client"
 import React, { useState } from 'react';
 
 interface SummaryProps {
   selectedPlan: 'Arcade' | 'Advanced' | 'Pro' | null;
   billingPeriod: 'monthly' | 'yearly';
-  selectedAddOns: { name: string; prices: [number, number, number] }[];
+  selectedAddOns: { name: string; prices: [number, number, number] }[]; // Array of prices for each plan
   onGoBack: () => void;
   onConfirm: () => void;
   onEditPlan: () => void;
@@ -25,7 +26,7 @@ const planIndex: Record<'Arcade' | 'Advanced' | 'Pro', number> = {
 const Summary: React.FC<SummaryProps> = ({
   selectedPlan,
   billingPeriod,
-  selectedAddOns = [],
+  selectedAddOns = [], // Default to an empty array if not provided
   onGoBack,
   onConfirm,
   onEditPlan,
@@ -45,11 +46,20 @@ const Summary: React.FC<SummaryProps> = ({
   // Calculate the price of the selected plan
   const planPrice = selectedPlan
     ? billingPeriod === 'monthly'
-      ? planPrices[selectedPlan]?.priceMonthly ?? 0
-      : planPrices[selectedPlan]?.priceYearly ?? 0
+      ? planPrices[selectedPlan]?.priceMonthly ?? 0 // Fallback to 0 if undefined
+      : planPrices[selectedPlan]?.priceYearly ?? 0 // Fallback to 0 if undefined
     : 0;
 
-  // Function to format the price
+  // Calculate the total add-ons price
+  const addOnsPrice = selectedAddOns.reduce((total, addOn) => {
+    const index = selectedPlan && planIndex[selectedPlan] !== undefined ? planIndex[selectedPlan] : 0;
+    return total + addOn.prices[index];
+  }, 0);
+
+  // Calculate the total price including add-ons
+  const totalPrice = planPrice + addOnsPrice;
+
+  // Function to format the price (ensure it gets a valid number)
   const formatPrice = (price: number): string => {
     return price.toFixed(2); // Format the price to two decimal places
   };
@@ -83,11 +93,7 @@ const Summary: React.FC<SummaryProps> = ({
           <ul className="list-disc list-inside">
             {selectedAddOns.map((addOn, index) => (
               <li key={index} className="text-lg">
-                {addOn.name} - $
-                {selectedPlan && planIndex[selectedPlan] !== undefined 
-                  ? formatPrice(addOn.prices[planIndex[selectedPlan]]) 
-                  : '0.00'
-                }/mo
+                {addOn.name} - ${formatPrice(addOn.prices[planIndex[selectedPlan as keyof typeof planIndex]])}/{billingPeriod}
               </li>
             ))}
           </ul>
@@ -101,6 +107,14 @@ const Summary: React.FC<SummaryProps> = ({
         >
           Change Add-Ons
         </button>
+      </div>
+
+      {/* Display total price */}
+      <div className="mb-6">
+        <h3 className="text-xl font-bold text-blue-900 mb-2">Total</h3>
+        <p className="text-lg">
+          ${formatPrice(totalPrice)}/{billingPeriod}
+        </p>
       </div>
 
       <div className="flex space-x-4">

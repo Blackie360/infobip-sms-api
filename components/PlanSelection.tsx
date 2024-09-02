@@ -33,20 +33,7 @@ const PlanSelection: React.FC<PlanSelectionProps> = ({
 }) => (
   <>
     <h2 className="text-3xl font-bold text-blue-900 mb-4">Select Plan</h2>
-    <div className="mb-6 flex items-center">
-      <button
-        onClick={() => setBillingPeriod('monthly')}
-        className={`px-4 py-2 rounded-lg ${billingPeriod === 'monthly' ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700'}`}
-      >
-        Monthly
-      </button>
-      <button
-        onClick={() => setBillingPeriod('yearly')}
-        className={`px-4 py-2 rounded-lg ml-4 ${billingPeriod === 'yearly' ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700'}`}
-      >
-        Yearly
-      </button>
-    </div>
+    
     <div className="flex space-x-4">
       {plans.map((plan) => (
         <Card
@@ -64,6 +51,21 @@ const PlanSelection: React.FC<PlanSelectionProps> = ({
           </CardContent>
         </Card>
       ))}
+    </div>
+    <br />
+    <div className="mb-6 flex items-center">
+      <button
+        onClick={() => setBillingPeriod('monthly')}
+        className={`px-4 py-2 rounded-lg ${billingPeriod === 'monthly' ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700'}`}
+      >
+        Monthly
+      </button>
+      <button
+        onClick={() => setBillingPeriod('yearly')}
+        className={`px-4 py-2 rounded-lg ml-4 ${billingPeriod === 'yearly' ? 'bg-blue-900 text-white' : 'bg-gray-200 text-gray-700'}`}
+      >
+        Yearly
+      </button>
     </div>
     <div className="mt-6 flex space-x-4">
       <button
