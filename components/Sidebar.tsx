@@ -1,5 +1,5 @@
 "use client"
-import { useState } from 'react';
+import React, { useState } from 'react';
 import StepNav from './StepNav';
 import PersonalInfo from './PersonalInfo';
 import PlanSelection from './PlanSelection';
@@ -21,7 +21,7 @@ const Sidebar: React.FC = () => {
 
   const handleStepChange = (stepId: string) => {
     setActiveStep(stepId);
-    if (stepId !== 'step2') setSelectedPlan(null); // Reset selected plan when navigating to a new step
+    setSelectedPlan(null); // Reset selected plan when navigating to a new step
   };
 
   const handleNextStep = () => {
@@ -47,13 +47,16 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen bg-light-blue" style={{
-      backgroundImage: `url('/background.svg')`,
-      backgroundRepeat: 'no-repeat',
-      
-      
-    }}>
-      <aside className="w-1/3 rounded-xl p-8 m-6">
+    <div className="flex min-h-screen">
+      <aside
+        className="w-1/3 rounded-xl p-8 m-6 sidebar-bg"
+        style={{
+          backgroundImage: `url('/background.svg')`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+        }}
+      >
         <StepNav steps={steps} activeStep={activeStep} onStepChange={handleStepChange} />
       </aside>
 
@@ -71,7 +74,7 @@ const Sidebar: React.FC = () => {
           />
         ) : activeStep === 'step3' ? (
           <AddOns
-            selectedAddOns={selectedAddOns}
+            selectedAddOns={selectedAddOns}  // Ensure this matches the expected type
             setSelectedAddOns={setSelectedAddOns}
             onNextStep={handleNextStep}
             onGoBack={handleGoBack}
@@ -80,7 +83,7 @@ const Sidebar: React.FC = () => {
           <Summary
             selectedPlan={selectedPlan as "Arcade" | "Advanced" | "Pro" | null}
             billingPeriod={billingPeriod}
-            selectedAddOns={selectedAddOns}
+            selectedAddOns={selectedAddOns}  // Ensure this matches the expected type
             onGoBack={handleGoBack}
             onConfirm={handleConfirm}
             onEditPlan={() => setActiveStep('step2')}

@@ -15,13 +15,19 @@ const addOns = [
 ];
 
 const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNextStep, onGoBack }) => {
-  const handleSelectAddOn = (addOn: string) => {
+  const handleSelectAddOn = (addOnName: string) => {
     setSelectedAddOns(prev => {
-      const updatedAddOns = prev.find(item => item.name === addOn)
-        ? prev.filter(item => item.name !== addOn)
-        : [...prev, { name: addOn, prices: addOns.find(item => item.name === addOn)?.price ? [addOns.find(item => item.name === addOn)?.price, 0, 0] : [0, 0, 0] as [number, number, number] }];
-      console.log('Updated Add-Ons:', updatedAddOns); // Debugging
-      return updatedAddOns;
+      const addOn = addOns.find(item => item.name === addOnName);
+      if (!addOn) return prev;
+
+      const isAlreadySelected = prev.some(item => item.name === addOnName);
+      if (isAlreadySelected) {
+        // Remove the add-on if it's already selected
+        return prev.filter(item => item.name !== addOnName);
+      } else {
+        // Add the new add-on
+        return [...prev, { name: addOn.name, prices: [addOn.price, 0, 0] }];
+      }
     });
   };
 
