@@ -19,7 +19,7 @@ const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNe
     setSelectedAddOns(prev => {
       const updatedAddOns = prev.find(item => item.name === addOn)
         ? prev.filter(item => item.name !== addOn)
-        : [...prev, { name: addOn, prices: addOns.find(item => item.name === addOn)?.price ? [addOns.find(item => item.name === addOn)?.price, 0, 0] : [0, 0, 0] }];
+        : [...prev, { name: addOn, prices: addOns.find(item => item.name === addOn)?.price ? [addOns.find(item => item.name === addOn)?.price, 0, 0] : [0, 0, 0] as [number, number, number] }];
       console.log('Updated Add-Ons:', updatedAddOns); // Debugging
       return updatedAddOns;
     });

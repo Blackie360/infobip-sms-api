@@ -49,6 +49,9 @@ const Sidebar: React.FC = () => {
   return (
     <div className="flex min-h-screen bg-light-blue" style={{
       backgroundImage: `url('/background.svg')`,
+      backgroundRepeat: 'no-repeat',
+      
+      
     }}>
       <aside className="w-1/3 rounded-xl p-8 m-6">
         <StepNav steps={steps} activeStep={activeStep} onStepChange={handleStepChange} />
