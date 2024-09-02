@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React, { useState } from 'react';
 import StepNav from './StepNav';
 import PersonalInfo from './PersonalInfo';
@@ -47,9 +47,9 @@ const Sidebar: React.FC = () => {
   };
 
   return (
-    <div className="flex min-h-screen">
+    <div className="flex flex-col md:flex-row min-h-screen">
       <aside
-        className="w-1/3 rounded-xl p-8 m-6 sidebar-bg"
+        className="w-full md:w-1/3 rounded-xl p-4 md:p-8 m-4 md:m-6 bg-gray-100 sidebar-bg"
         style={{
           backgroundImage: `url('/background.svg')`,
           backgroundSize: 'cover',
@@ -60,7 +60,7 @@ const Sidebar: React.FC = () => {
         <StepNav steps={steps} activeStep={activeStep} onStepChange={handleStepChange} />
       </aside>
 
-      <main className="w-2/3 bg-white rounded-xl p-8 m-6 shadow-md">
+      <main className="w-full md:w-2/3 bg-white rounded-xl p-4 md:p-8 m-4 md:m-6 shadow-md">
         {activeStep === 'step1' ? (
           <PersonalInfo onNextStep={handleNextStep} />
         ) : activeStep === 'step2' ? (
@@ -83,7 +83,7 @@ const Sidebar: React.FC = () => {
           <Summary
             selectedPlan={selectedPlan as "Arcade" | "Advanced" | "Pro" | null}
             billingPeriod={billingPeriod}
-            selectedAddOns={selectedAddOns}  // Ensure this matches the expected type
+            selectedAddOns={selectedAddOns} 
             onGoBack={handleGoBack}
             onConfirm={handleConfirm}
             onEditPlan={() => setActiveStep('step2')}
