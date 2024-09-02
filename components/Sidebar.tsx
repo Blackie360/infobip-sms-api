@@ -17,11 +17,11 @@ const Sidebar: React.FC = () => {
   const [activeStep, setActiveStep] = useState<string>('step1');
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
-  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
+  const [selectedAddOns, setSelectedAddOns] = useState<{ name: string; prices: [number, number, number]; }[]>([]);
 
   const handleStepChange = (stepId: string) => {
     setActiveStep(stepId);
-    setSelectedPlan(null); // Reset selected plan when navigating to a new step
+    if (stepId !== 'step2') setSelectedPlan(null); // Reset selected plan when navigating to a new step
   };
 
   const handleNextStep = () => {
@@ -35,6 +35,7 @@ const Sidebar: React.FC = () => {
     const prevStep = steps[currentIndex - 1];
     if (prevStep) setActiveStep(prevStep.id);
   };
+
   const handleConfirm = () => {
     // Logic to confirm the selections
     console.log('Confirmed:', {
@@ -65,20 +66,21 @@ const Sidebar: React.FC = () => {
           />
         ) : activeStep === 'step3' ? (
           <AddOns
-  selectedAddOns={selectedAddOns || []}
-  setSelectedAddOns={setSelectedAddOns}
-  onNextStep={handleNextStep}
-  onGoBack={handleGoBack}
-/>
-
+            selectedAddOns={selectedAddOns}
+            setSelectedAddOns={setSelectedAddOns}
+            onNextStep={handleNextStep}
+            onGoBack={handleGoBack}
+          />
         ) : (
           <Summary
-          selectedPlan={selectedPlan}
-          billingPeriod={billingPeriod}
-          selectedAddOns={selectedAddOns} // This should be the array of selected add-ons
-          onGoBack={handleGoBack}
-          onConfirm={handleConfirm}
-        />
+            selectedPlan={selectedPlan as "Arcade" | "Advanced" | "Pro" | null}
+            billingPeriod={billingPeriod}
+            selectedAddOns={selectedAddOns}
+            onGoBack={handleGoBack}
+            onConfirm={handleConfirm}
+            onEditPlan={() => setActiveStep('step2')}
+            onEditAddOns={() => setActiveStep('step3')}
+          />
         )}
       </main>
     </div>

@@ -2,8 +2,8 @@ import React from 'react';
 import { Card, CardContent } from './ui/card';
 
 interface AddOnsProps {
-  selectedAddOns: string[];
-  setSelectedAddOns: React.Dispatch<React.SetStateAction<string[]>>;
+  selectedAddOns: { name: string; prices: [number, number, number]; }[];
+  setSelectedAddOns: React.Dispatch<React.SetStateAction<{ name: string; prices: [number, number, number]; }[]>>;
   onNextStep: () => void;
   onGoBack: () => void;
 }
@@ -15,26 +15,25 @@ const addOns = [
 ];
 
 const AddOns: React.FC<AddOnsProps> = ({ selectedAddOns, setSelectedAddOns, onNextStep, onGoBack }) => {
-  // Handle the case where selectedAddOns might be undefined
-  if (!selectedAddOns) {
-    selectedAddOns = [];
-  }
-
   const handleSelectAddOn = (addOn: string) => {
-    setSelectedAddOns(prev =>
-      prev.includes(addOn) ? prev.filter(item => item !== addOn) : [...prev, addOn]
-    );
+    setSelectedAddOns(prev => {
+      const updatedAddOns = prev.find(item => item.name === addOn)
+        ? prev.filter(item => item.name !== addOn)
+        : [...prev, { name: addOn, prices: addOns.find(item => item.name === addOn)?.price ? [addOns.find(item => item.name === addOn)?.price, 0, 0] : [0, 0, 0] }];
+      console.log('Updated Add-Ons:', updatedAddOns); // Debugging
+      return updatedAddOns;
+    });
   };
 
   return (
     <>
       <h2 className="text-3xl font-bold text-blue-900 mb-4">Pick Add-Ons</h2>
-      <p className="text-gray-500 mb-8">Select any add-ons you would  like to include with your plan.</p>
+      <p className="text-gray-500 mb-8">Select any add-ons you would like to include with your plan.</p>
       <div className="flex flex-col space-y-4">
         {addOns.map(addOn => (
           <Card
             key={addOn.name}
-            className={`p-4 flex items-center justify-between rounded-lg cursor-pointer ${selectedAddOns.includes(addOn.name) ? 'bg-purple-100' : 'bg-gray-100'}`}
+            className={`p-4 flex items-center justify-between rounded-lg cursor-pointer ${selectedAddOns.find(item => item.name === addOn.name) ? 'bg-purple-100' : 'bg-gray-100'}`}
             onClick={() => handleSelectAddOn(addOn.name)}
           >
             <CardContent className="flex flex-col">

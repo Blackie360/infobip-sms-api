@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import Popup from './Popup';
 
 interface SummaryProps {
   selectedPlan: 'Arcade' | 'Advanced' | 'Pro' | null;
   billingPeriod: 'monthly' | 'yearly';
-  selectedAddOns: { name: string; prices: [number, number, number] }[]; // Array of prices for each plan
+  selectedAddOns: { name: string; prices: [number, number, number] }[];
   onGoBack: () => void;
   onConfirm: () => void;
   onEditPlan: () => void;
@@ -26,7 +25,7 @@ const planIndex: Record<'Arcade' | 'Advanced' | 'Pro', number> = {
 const Summary: React.FC<SummaryProps> = ({
   selectedPlan,
   billingPeriod,
-  selectedAddOns,
+  selectedAddOns = [],
   onGoBack,
   onConfirm,
   onEditPlan,
@@ -46,11 +45,11 @@ const Summary: React.FC<SummaryProps> = ({
   // Calculate the price of the selected plan
   const planPrice = selectedPlan
     ? billingPeriod === 'monthly'
-      ? planPrices[selectedPlan]?.priceMonthly ?? 0 // Fallback to 0 if undefined
-      : planPrices[selectedPlan]?.priceYearly ?? 0 // Fallback to 0 if undefined
+      ? planPrices[selectedPlan]?.priceMonthly ?? 0
+      : planPrices[selectedPlan]?.priceYearly ?? 0
     : 0;
 
-  // Function to format the price (ensure it gets a valid number)
+  // Function to format the price
   const formatPrice = (price: number): string => {
     return price.toFixed(2); // Format the price to two decimal places
   };
@@ -84,10 +83,10 @@ const Summary: React.FC<SummaryProps> = ({
           <ul className="list-disc list-inside">
             {selectedAddOns.map((addOn, index) => (
               <li key={index} className="text-lg">
-                {addOn.name} - ${
-                  selectedPlan && planIndex[selectedPlan] !== undefined 
-                    ? formatPrice(addOn.prices[planIndex[selectedPlan]]) 
-                    : '0.00'
+                {addOn.name} - $
+                {selectedPlan && planIndex[selectedPlan] !== undefined 
+                  ? formatPrice(addOn.prices[planIndex[selectedPlan]]) 
+                  : '0.00'
                 }/mo
               </li>
             ))}
@@ -120,13 +119,6 @@ const Summary: React.FC<SummaryProps> = ({
           Confirm
         </button>
       </div>
-
-      {showPopup && (
-        <Popup
-          message="Thank you for your purchase!"
-          onClose={handleClosePopup}
-        />
-      )}
     </div>
   );
 };

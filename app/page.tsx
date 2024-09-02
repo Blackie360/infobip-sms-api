@@ -1,5 +1,5 @@
 import Sidebar from "@/components/Sidebar";
-import ProfileForm from "./profile/page";
+
 
 export default function Home() {
   return (
