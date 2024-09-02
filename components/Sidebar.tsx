@@ -1,9 +1,10 @@
 "use client"
-
 import { useState } from 'react';
 import StepNav from './StepNav';
-import PlanSelection from './PlanSelection';
 import PersonalInfo from './PersonalInfo';
+import PlanSelection from './PlanSelection';
+import AddOns from './AddOns';
+import Summary from './Summary';
 
 const steps = [
   { id: 'step1', label: 'Your Info', number: 1 },
@@ -16,6 +17,7 @@ const Sidebar: React.FC = () => {
   const [activeStep, setActiveStep] = useState<string>('step1');
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [selectedPlan, setSelectedPlan] = useState<string | null>(null);
+  const [selectedAddOns, setSelectedAddOns] = useState<string[]>([]);
 
   const handleStepChange = (stepId: string) => {
     setActiveStep(stepId);
@@ -32,6 +34,15 @@ const Sidebar: React.FC = () => {
     const currentIndex = steps.findIndex(step => step.id === activeStep);
     const prevStep = steps[currentIndex - 1];
     if (prevStep) setActiveStep(prevStep.id);
+  };
+  const handleConfirm = () => {
+    // Logic to confirm the selections
+    console.log('Confirmed:', {
+      selectedPlan,
+      billingPeriod,
+      selectedAddOns,
+    });
+    // You can also redirect or perform other actions here
   };
 
   return (
@@ -52,8 +63,16 @@ const Sidebar: React.FC = () => {
             onNextStep={handleNextStep}
             onGoBack={handleGoBack}
           />
+        ) : activeStep === 'step3' ? (
+          <AddOns onNextStep={handleNextStep} onGoBack={handleGoBack} />
         ) : (
-          <p>Other steps here...</p>
+          <Summary
+          selectedPlan={selectedPlan}
+          billingPeriod={billingPeriod}
+          selectedAddOns={selectedAddOns} // This should be the array of selected add-ons
+          onGoBack={handleGoBack}
+          onConfirm={handleConfirm}
+        />
         )}
       </main>
     </div>

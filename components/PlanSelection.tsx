@@ -69,13 +69,17 @@ const PlanSelection: React.FC<PlanSelectionProps> = ({ billingPeriod, setBilling
         Go Back
       </button>
       <button
-        type="button"
-        className="bg-blue-900 text-white px-6 py-3 rounded-lg"
-        onClick={onNextStep}
-        disabled={!selectedPlan}
-      >
-        Next Step
-      </button>
+  type="button"
+  className="bg-blue-900 text-white px-6 py-3 rounded-lg"
+  onClick={() => {
+    console.log('Next Step Clicked'); // Debug log
+    onNextStep();
+  }}
+  disabled={!selectedPlan}
+>
+  Next Step
+</button>
+
     </div>
   </>
 );
